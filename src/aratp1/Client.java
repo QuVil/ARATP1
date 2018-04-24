@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 import java.net.DatagramPacket;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Scanner;
 
 /**
  *
@@ -26,8 +27,8 @@ public class Client extends Com{
         String connectMessage = "hello rx302";
         
         try{
-            InetAddress serverAddress = InetAddress.getByName("127.0.0.1");
-            send(connectMessage, serverAddress, SERVER_PORT);
+            InetAddress serverAddress = InetAddress.getByName(DEFAULT_SERVER_IP);
+            send(connectMessage, serverAddress, DEFAULT_SERVER_PORT);
             
             byte[] data = new byte[512];
             DatagramPacket dp = new DatagramPacket(data, data.length);
@@ -50,8 +51,45 @@ public class Client extends Com{
         }
     }
     
+    public void runClient(){
+        connectToServer();
+        
+        while(true){
+            Scanner s = new Scanner(System.in);
+            String messageText = s.nextLine();
+            
+            if (!messageText.isEmpty()){
+                try{
+                    InetAddress serverAddress = 
+                            InetAddress.getByName(DEFAULT_SERVER_IP);
+                    
+                    send(messageText, serverAddress, DEFAULT_SERVER_PORT);
+                    
+                    //wait for confirmation from the server that the message
+                    //has been received
+                    byte[] data = new byte[512];
+                    dp = new DatagramPacket(data, data.length);
+                    ds.receive(dp);
+                    
+                    String messageData = new String(dp.getData(), "UTF-8")
+                            .trim();
+                    
+                    if (messageData.equals(messageText)){
+                        System.out.println("Message sent successfuly.\n");
+                    }
+                    
+                }catch(UnknownHostException uhe){
+                    System.out.println("UnknownHost : runtime interrupted");
+                }catch(IOException ioe){
+                    System.out.println("IOException : runtime interrupted");
+                }
+            }
+        }
+    }
+    
     public static void main(String[] args) {
         Client cli = new Client();
-        cli.connectToServer();
+        
+        cli.runClient();
     }
 }

@@ -16,7 +16,8 @@ import java.io.IOException;
  * @author p1507338
  */
 public class Com {
-    public static final int SERVER_PORT = 6969;
+    public static final int DEFAULT_SERVER_PORT = 6969;
+    public static final String DEFAULT_SERVER_IP = "127.0.0.1";
     
     DatagramSocket ds;
     DatagramPacket dp;

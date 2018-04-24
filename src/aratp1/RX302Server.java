@@ -7,7 +7,7 @@ package aratp1;
 
 import java.net.DatagramPacket;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 
 /**
  *
@@ -15,29 +15,56 @@ import java.util.Arrays;
  */
 public class RX302Server extends Com{
     
-    //opens a RX302 server on port SERVER_PORT
+    private ArrayList<String> connectedClients;
+    
+    //opens a RX302 server on port DEFAULT_SERVER_PORT
     public RX302Server(){
-        super(SERVER_PORT);
+        super(DEFAULT_SERVER_PORT);
+        
+        connectedClients = new ArrayList<>();
     }
     
     public void runRX302(){
-        byte[] data = new byte[512];
-        dp = new DatagramPacket(data, data.length);
-        
         while(true){
+            byte[] data = new byte[512];
+            dp = new DatagramPacket(data, data.length);
+            
             try{
                 ds.receive(dp);
                 //WAIT
                 System.out.println("New message received...");
                 String messageData = new String(dp.getData(), "UTF-8");
                 
+                boolean escapeConnectionMessage = false;
+                
+                //Case : The message is an initial connection message
                 if (messageData.contains("hello rx302")){
                     System.out.println("New client online : " 
-                            + dp.getSocketAddress().toString());
-                
-                String answerString = "rx302 ready";
-
-                send(answerString, dp.getAddress(), dp.getPort());
+                            + dp.getSocketAddress().toString() + "\n");
+                    
+                    //Escape of case where an already connected client sends
+                    //the initial connection message
+                    if (connectedClients.contains(
+                            dp.getSocketAddress().toString())){
+                        escapeConnectionMessage = true;
+                    }else{
+                        connectedClients.add(dp.getSocketAddress().toString());
+                        
+                        String answerString = "rx302 ready";
+                        //answerString triggers the client to know that 
+                        //connection was successful
+                        send(answerString, dp.getAddress(), dp.getPort());
+                    }
+                    
+                } //Case : The message is from a connected client - displays it
+                else if(connectedClients.contains(
+                        dp.getSocketAddress().toString()) 
+                        || escapeConnectionMessage){
+                    System.out.println(dp.getSocketAddress().toString() +
+                            " says :\n" + messageData + "\n");
+                    
+                    //Send back the message to the client for confirmation
+                    send(messageData, dp.getAddress(), dp.getPort());
                 }
                 
             }catch(IOException ioe){
