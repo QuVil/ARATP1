@@ -32,7 +32,7 @@ public class RX302Server extends Com{
             try{
                 ds.receive(dp);
                 //WAIT
-                System.out.println("New message received...");
+                
                 String messageData = new String(dp.getData(), "UTF-8");
                 
                 boolean escapeConnectionMessage = false;
@@ -60,6 +60,8 @@ public class RX302Server extends Com{
                 else if(connectedClients.contains(
                         dp.getSocketAddress().toString()) 
                         || escapeConnectionMessage){
+                    
+                    System.out.println("New message received...");
                     System.out.println(dp.getSocketAddress().toString() +
                             " says :\n" + messageData + "\n");
                     
