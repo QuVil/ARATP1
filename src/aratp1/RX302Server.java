@@ -7,6 +7,8 @@ package aratp1;
 
 import java.net.DatagramPacket;
 import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 /**
@@ -32,41 +34,12 @@ public class RX302Server extends Com{
             try{
                 ds.receive(dp);
                 //WAIT
-                System.out.println("New message received...");
-                String messageData = new String(dp.getData(), "UTF-8");
-                
-                boolean escapeConnectionMessage = false;
-                
-                //Case : The message is an initial connection message
-                if (messageData.contains("hello rx302")){
-                    System.out.println("New client online : " 
-                            + dp.getSocketAddress().toString() + "\n");
-                    
-                    //Escape of case where an already connected client sends
-                    //the initial connection message
-                    if (connectedClients.contains(
-                            dp.getSocketAddress().toString())){
-                        escapeConnectionMessage = true;
-                    }else{
-                        connectedClients.add(dp.getSocketAddress().toString());
-                        
-                        String answerString = "rx302 ready";
-                        //answerString triggers the client to know that 
-                        //connection was successful
-                        send(answerString, dp.getAddress(), dp.getPort());
-                    }
-                    
-                } //Case : The message is from a connected client - displays it
-                else if(connectedClients.contains(
-                        dp.getSocketAddress().toString()) 
-                        || escapeConnectionMessage){
-                    System.out.println(dp.getSocketAddress().toString() +
-                            " says :\n" + messageData + "\n");
-                    
-                    //Send back the message to the client for confirmation
-                    send(messageData, dp.getAddress(), dp.getPort());
-                }
-                
+                ArrayList<Integer> listPort = this.scan(1, 65000);
+                Integer newPort = listPort.get(listPort.size() -1);
+                DatagramSocket newSock = new DatagramSocket(newPort);
+                CommunicationThread CT = new CommunicationThread(newSock, dp);
+                System.out.println(dp.getData());
+                CT.run();
             }catch(IOException ioe){
                 System.out.println("IOException : runtime interrupted");
             }
