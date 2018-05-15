@@ -21,7 +21,9 @@ public class Client extends Com{
     public Client(){
         super();
     }
-    
+    // TODO !! ATTENTION ne marche probablement pas
+    // parser le port recu par le server dans le message "rx203 ready <PORT_SERVER>"
+    // et tester
     //connects to default server (localhost, port 6969)
     public void connectToServer(){
         String connectMessage = "hello rx302";
@@ -41,6 +43,7 @@ public class Client extends Com{
                 if (messageData.contains("rx302 ready")){
                     System.out.println("Connection successful @ " 
                             + dp.getSocketAddress().toString());
+                    int currentServerport = Integer(messageData.split(" ")[1]);
                 }
             }catch(IOException e){
                 System.out.println("IOException : runtime interrupted");
@@ -75,6 +78,7 @@ public class Client extends Com{
                             .trim();
                     
                     if (messageData.equals(messageText)){
+                        System.out.println(dp.getPort());
                         System.out.println("Message sent successfuly.\n");
                     }
                     
