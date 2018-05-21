@@ -8,6 +8,7 @@ package aratp1;
 import java.net.DatagramPacket;
 import java.io.IOException;
 import java.net.DatagramSocket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -17,10 +18,13 @@ import java.util.concurrent.TimeUnit;
  */
 public class RX302Server extends Com{
     
+    private ArrayList<String> connectedClients;
     
     //opens a RX302 server on port DEFAULT_SERVER_PORT
     public RX302Server(){
         super(DEFAULT_SERVER_PORT);
+        
+        connectedClients = new ArrayList<>();
     }
     
     public void runRX302(){
@@ -31,12 +35,7 @@ public class RX302Server extends Com{
             try{
                 ds.receive(dp);
                 //WAIT
-<<<<<<< HEAD
                 ArrayList<Integer> listPort = Com.scan(1, 65000);
-=======
-
-                ArrayList<Integer> listPort = this.scan(1, 65000);
->>>>>>> a56fc4ff0851587031a144fd416dbaffba800bd1
                 Integer newPort = listPort.get(listPort.size() -1);
 		System.out.println(newPort);
                 DatagramSocket newSock = new DatagramSocket(newPort);
