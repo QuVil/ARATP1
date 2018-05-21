@@ -20,38 +20,33 @@ public class RX302Server extends Com{
 
     //opens a RX302 server on port DEFAULT_SERVER_PORT
     public RX302Server(){
-        super(DEFAULT_SERVER_PORT);
+	super(DEFAULT_SERVER_PORT);
     }
 
     public void runRX302(){
-        while(true){
+	while(true){
 
 
-            try{
-                System.out.println("Attente de nouveau client");
-                byte[] data = new byte[512];
-                dp = new DatagramPacket(data, data.length);
-                ds.receive(dp);
-                //WAIT
-                // Integer newPort = this.scan(1, 65000);
-                DatagramSocket newSock = this.scan(1, 65000);
-                Integer newPort = newSock.getLocalPort();
-                // Integer newPort = listPort.get(listPort.length -1);
-		        System.out.println(newPort);
-                // DatagramSocket newSock = new DatagramSocket(newPort);
-                System.out.println("kek");
-                CommunicationThread CT = new CommunicationThread(newSock, dp, newPort);
-                new Thread(CT).start();
-                // CT.run();
-            }catch(IOException ioe){
-		    ioe.printStackTrace();
-                System.out.println("IUException : runtime interrupted");
-            }
-        }
+	    try{
+		System.out.println("Attente de nouveau client");
+		byte[] data = new byte[512];
+		dp = new DatagramPacket(data, data.length);
+		ds.receive(dp);
+		DatagramSocket newSock = this.scan(1, 65000);
+		Integer newPort = newSock.getLocalPort();
+		System.out.println("Nouveau port thread : " + newPort);
+		CommunicationThread CT = new CommunicationThread(newSock, dp, newPort);
+		new Thread(CT).start();
+	    }
+	    catch(IOException ioe){
+		ioe.printStackTrace();
+		System.out.println("IUException : runtime interrupted");
+	    }
+	}
     }
 
     public static void main(String[] args) {
-        RX302Server serv = new RX302Server();
-        serv.runRX302();
+	RX302Server serv = new RX302Server();
+	serv.runRX302();
     }
 }

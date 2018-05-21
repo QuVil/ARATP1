@@ -21,10 +21,6 @@ public class Client extends Com{
 	public Client(){
 		super();
 	}
-	// TODO !! ATTENTION ne marche probablement pas
-	// parser le port recu par le server dans le message "rx203 ready <PORT_SERVER>"
-	// et tester
-	//connects to default server (localhost, port 6969)
 	public int connectToServer(){
 		String connectMessage = "hello rx302";
 		int currentServerport = 0;
@@ -77,6 +73,7 @@ public class Client extends Com{
 
 					String messageData = new String(dp.getData(), "UTF-8")
 						.trim();
+					System.out.println("Message reçu :" + messageData);
 
 					if (messageData.equals(messageText)){
 						System.out.println(dp.getPort());
