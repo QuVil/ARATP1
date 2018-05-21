@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -34,13 +35,14 @@ public class RX302Server extends Com{
             try{
                 ds.receive(dp);
                 //WAIT
-                ArrayList<Integer> listPort = this.scan(1, 65000);
+                ArrayList<Integer> listPort = Com.scan(1, 65000);
                 Integer newPort = listPort.get(listPort.size() -1);
+		System.out.println(newPort);
                 DatagramSocket newSock = new DatagramSocket(newPort);
-                CommunicationThread CT = new CommunicationThread(newSock, dp);
-                System.out.println(dp.getData());
+                CommunicationThread CT = new CommunicationThread(newSock, dp, newPort);
                 CT.run();
             }catch(IOException ioe){
+		    ioe.printStackTrace();
                 System.out.println("IOException : runtime interrupted");
             }
         }
