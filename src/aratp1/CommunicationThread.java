@@ -22,6 +22,7 @@ public class CommunicationThread extends Com implements Runnable {
     private InetAddress IP_ADDRESS;
     private int PORT_CLIENT;
     private int PORT;
+
     public CommunicationThread (DatagramSocket ds, DatagramPacket dp, int newPort) {
 	this.ds = ds;
 	this.dp = dp;
@@ -29,7 +30,7 @@ public class CommunicationThread extends Com implements Runnable {
 	this.PORT_CLIENT = dp.getPort();
 	this.PORT = newPort;
     }
-    
+
 
     @Override
     public void run() {
@@ -46,7 +47,7 @@ public class CommunicationThread extends Com implements Runnable {
 		System.out.println("New message received... " + this.IP_ADDRESS.getHostName());
 		String messageData = new String(dp.getData(), "UTF-8");
 		if (messageData.contains("hello rx302")){
-		    System.out.println("New client online : " 
+		    System.out.println("New client online : "
 				       + dp.getSocketAddress().toString());
 		    send("rx302 ready " + this.PORT,  dp.getAddress(), dp.getPort());
 		}
@@ -61,7 +62,7 @@ public class CommunicationThread extends Com implements Runnable {
 		dp = new DatagramPacket(data, data.length);
 		ds.receive(dp);
 	    } catch(IOException ioe){
-		System.out.println("IOException : runtime interrupted");
+		System.out.println("IFException : runtime interrupted");
 	    } catch(Exception e){
 		throw(e);
 	    }

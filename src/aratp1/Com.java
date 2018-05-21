@@ -41,8 +41,8 @@ public class Com {
 	}
 
 	protected void send(String data, InetAddress ip, int port){
-		DatagramPacket dp = new DatagramPacket(data.getBytes(), 
-				data.getBytes().length, 
+		DatagramPacket dp = new DatagramPacket(data.getBytes(),
+				data.getBytes().length,
 				ip, port);
 		try{
 			ds.send(dp);
@@ -54,7 +54,7 @@ public class Com {
 	}
 
 	//returns an ArrayList of all unused (UDP) ports and displays the busy ones
-	public static ArrayList<Integer> scan(int dep, int fin){
+	public DatagramSocket scan(int dep, int fin){
 		ArrayList<Integer> portList = new ArrayList<>();
 		DatagramSocket ds;
 		System.out.println("Ports occupés :");
@@ -62,7 +62,7 @@ public class Com {
 		for (int i=dep; i<=fin; ++i){
 			try{
 				ds = new DatagramSocket(i);
-				ds.close();
+				return ds;
 
 			}catch (SocketException se){
 				portList.add(i);
@@ -70,7 +70,7 @@ public class Com {
 		}
 
 
-		return portList;
+		return null;
 	}
 
 	public void changePort(int newPort) {

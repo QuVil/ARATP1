@@ -40,7 +40,7 @@ public class Client extends Com{
 			String messageData = new String(dp.getData(), "UTF-8");
 
 			if (messageData.contains("rx302 ready")){
-				System.out.println("Connection successful @ " 
+				System.out.println("Connection successful @ "
 						+ dp.getSocketAddress().toString());
 				System.out.println(messageData);
 				try {
@@ -51,7 +51,7 @@ public class Client extends Com{
 				}
 			}
 		} catch(IOException e){
-			System.out.println("IOException : runtime interrupted");
+			System.out.println("IWException : runtime interrupted");
 		}
 		return currentServerport;
 	}
@@ -65,7 +65,7 @@ public class Client extends Com{
 
 			if (!messageText.isEmpty()){
 				try{
-					InetAddress serverAddress = 
+					InetAddress serverAddress =
 						InetAddress.getByName(DEFAULT_SERVER_IP);
 					send(messageText, serverAddress, port);
 
