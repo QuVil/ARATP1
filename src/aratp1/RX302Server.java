@@ -41,7 +41,8 @@ public class RX302Server extends Com{
                 // DatagramSocket newSock = new DatagramSocket(newPort);
                 System.out.println("kek");
                 CommunicationThread CT = new CommunicationThread(newSock, dp, newPort);
-                CT.run();
+                new Thread(CT).start();
+                // CT.run();
             }catch(IOException ioe){
 		    ioe.printStackTrace();
                 System.out.println("IUException : runtime interrupted");
