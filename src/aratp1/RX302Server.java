@@ -18,12 +18,11 @@ public class RX302Server extends Com{
 
     //opens a RX302 server on port DEFAULT_SERVER_PORT
     public RX302Server(){
-	super(DEFAULT_SERVER_PORT);
+    	super(DEFAULT_SERVER_PORT);
     }
 
     public void runRX302(){
 	while(true){
-
 
 	    try{
 		System.out.println("Waiting for new client...");
@@ -31,9 +30,10 @@ public class RX302Server extends Com{
                 
 		dp = new DatagramPacket(data, data.length);
 		ds.receive(dp);
+		
 		DatagramSocket newSock = this.scan(1, 65000);
 		Integer newPort = newSock.getLocalPort();
-		System.out.println("New thread : Number " + newPort);
+		System.out.println("New thread : " + newPort);
                 
 		CommunicationThread CT = new CommunicationThread(newSock, dp, newPort);
 		new Thread(CT).start();

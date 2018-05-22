@@ -24,60 +24,60 @@ public class Com {
 
     //The default constructor simply creates the DatagramSocket.
     public Com(){
-	try{
-	    ds = new DatagramSocket();
-	}catch (SocketException se){
-	    System.out.println("Client runtime interrupted (SocketException):");
-	    System.out.println(se.getMessage());
-	}
+		try{
+		    ds = new DatagramSocket();
+		}catch (SocketException se){
+		    System.out.println("Client runtime interrupted (SocketException):");
+		    System.out.println(se.getMessage());
+		}
     }
 
     public Com(int port){
-	try{
-	    ds = new DatagramSocket(port);
-	}catch (SocketException se){
-	    System.out.println("Server runtime interrupted (SocketException):");
-	    System.out.println(se.getMessage());
-	}
+		try{
+		    ds = new DatagramSocket(port);
+		}catch (SocketException se){
+		    System.out.println("Server runtime interrupted (SocketException):");
+		    System.out.println(se.getMessage());
+		}
     }
 
     //Standard method for sending messages from Client to Server and vice-versa
     protected void send(String data, InetAddress ip, int port){
-	DatagramPacket dp = new DatagramPacket(data.getBytes(),
-					       data.getBytes().length,
-					       ip, port);
-	try{
-	    ds.send(dp);
-	}catch(IOException ioe){
-	    System.out.println("Runtime interrupted (SocketException) :");
-	    System.out.println(ioe.getMessage());
-	}
-
-    }
-
-    public DatagramSocket scan(int dep, int fin){
-	ArrayList<Integer> portList = new ArrayList<>();
-	DatagramSocket ds;
-	for (int i=fin; i>=dep; --i){
-	    try{
-		ds = new DatagramSocket(i);
-		return ds;
-
-	    }catch (SocketException se){
-		portList.add(i);
+		DatagramPacket dp = new DatagramPacket(data.getBytes(),
+						       data.getBytes().length,
+						       ip, port);
+		try{
+		    ds.send(dp);
+		}catch(IOException ioe){
+		    System.out.println("Runtime interrupted (SocketException) :");
+		    System.out.println(ioe.getMessage());
+		}
+	
 	    }
-	}
-
-
-	return null;
+	
+	    public DatagramSocket scan(int dep, int fin){
+		ArrayList<Integer> portList = new ArrayList<>();
+		DatagramSocket ds;
+		for (int i=fin; i>=dep; --i){
+		    try{
+			ds = new DatagramSocket(i);
+			return ds;
+	
+		    }catch (SocketException se){
+			portList.add(i);
+		    }
+		}
+	
+	
+		return null;
     }
 
     public void changePort(int newPort) {
-	InetAddress address = ds.getInetAddress();
-	try {
-	    this.ds = new DatagramSocket(newPort, address);
-	} catch (SocketException e) {
-            System.out.println("Runtime interrupted (SocketException)");
-	}
+		InetAddress address = ds.getInetAddress();
+		try {
+		    this.ds = new DatagramSocket(newPort, address);
+		} catch (SocketException e) {
+	            System.out.println("Runtime interrupted (SocketException)");
+		}
     }
 }
