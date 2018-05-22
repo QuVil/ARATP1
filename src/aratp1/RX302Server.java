@@ -18,7 +18,7 @@ public class RX302Server extends Com{
 
     //opens a RX302 server on port DEFAULT_SERVER_PORT
     public RX302Server(){
-	super(DEFAULT_SERVER_PORT);
+    	super(DEFAULT_SERVER_PORT);
     }
 
     public void runRX302(){

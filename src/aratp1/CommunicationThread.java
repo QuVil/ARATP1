@@ -10,6 +10,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -26,7 +27,8 @@ public class CommunicationThread extends Com implements Runnable {
     private final int PORT;
     private String threadType;
     
-    private static HashMap<InetAddress, Integer> clientList;
+    private static ArrayList<InetAddress> clientListAddr;
+    private static ArrayList<Integer> clientListPort;
 
     public CommunicationThread (DatagramSocket ds, DatagramPacket dp, int newPort) {
 		this.ds = ds;
@@ -36,8 +38,9 @@ public class CommunicationThread extends Com implements Runnable {
 		this.PORT = newPort;
 		this.threadType = "server";
 		
-		if (CommunicationThread.clientList == null || CommunicationThread.clientList.size() == 0){
-			CommunicationThread.clientList = new HashMap<>();
+		if (CommunicationThread.clientListAddr == null || CommunicationThread.clientListAddr.size() == 0){
+			CommunicationThread.clientListAddr = new ArrayList<>();
+			CommunicationThread.clientListPort = new ArrayList<>();
 			System.out.println("Creating Client list...\n");
 		}
     }
@@ -86,7 +89,8 @@ public class CommunicationThread extends Com implements Runnable {
 					}
 				    
 				    //Adds the new client to the list
-				    CommunicationThread.clientList.put(newCliAddress, newCliPort);
+				    CommunicationThread.clientListAddr.add(newCliAddress);
+				    CommunicationThread.clientListPort.add(newCliPort);
 				    
 				    send("rx302 ready " + this.PORT,  dp.getAddress(), dp.getPort());
 				}
@@ -112,8 +116,9 @@ public class CommunicationThread extends Com implements Runnable {
     }
     
     private void broadcastMessage(String messageData){
-    	for (HashMap.Entry<InetAddress, Integer> entry : CommunicationThread.clientList.entrySet()) {
-	        send(messageData, entry.getKey(), entry.getValue());
+    	for (int i=0; i<CommunicationThread.clientListAddr.size(); ++i) {
+	        send(messageData, CommunicationThread.clientListAddr.get(i), 
+	        	 CommunicationThread.clientListPort.get(i));
 	    }
     }
     
