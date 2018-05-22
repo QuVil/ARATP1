@@ -13,7 +13,7 @@ import java.net.SocketException;
 import java.io.IOException;
 /**
  *
- * @author p1507338
+ * @author p1507338 p1506450
  */
 public class Com {
     public static final int DEFAULT_SERVER_PORT = 6969;
@@ -22,6 +22,7 @@ public class Com {
     DatagramSocket ds;
     DatagramPacket dp;
 
+    //The default constructor simply creates the DatagramSocket.
     public Com(){
 	try{
 	    ds = new DatagramSocket();
@@ -40,6 +41,7 @@ public class Com {
 	}
     }
 
+    //Standard method for sending messages from Client to Server and vice-versa
     protected void send(String data, InetAddress ip, int port){
 	DatagramPacket dp = new DatagramPacket(data.getBytes(),
 					       data.getBytes().length,
@@ -76,7 +78,7 @@ public class Com {
 	try {
 	    this.ds = new DatagramSocket(newPort, address);
 	} catch (SocketException e) {
-	    e.printStackTrace();
+            System.out.println("Runtime interrupted (SocketException)");
 	}
     }
 }

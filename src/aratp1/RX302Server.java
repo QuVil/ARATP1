@@ -8,12 +8,10 @@ package aratp1;
 import java.net.DatagramPacket;
 import java.io.IOException;
 import java.net.DatagramSocket;
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 /**
  *
- * @author p1507338
+ * @author p1507338 p1506450
  */
 public class RX302Server extends Com{
 
@@ -28,18 +26,19 @@ public class RX302Server extends Com{
 
 
 	    try{
-		System.out.println("Attente de nouveau client");
+		System.out.println("Waiting for new client...");
 		byte[] data = new byte[512];
+                
 		dp = new DatagramPacket(data, data.length);
 		ds.receive(dp);
 		DatagramSocket newSock = this.scan(1, 65000);
 		Integer newPort = newSock.getLocalPort();
-		System.out.println("Nouveau port thread : " + newPort);
+		System.out.println("New thread : Number " + newPort);
+                
 		CommunicationThread CT = new CommunicationThread(newSock, dp, newPort);
 		new Thread(CT).start();
 	    }
 	    catch(IOException ioe){
-		ioe.printStackTrace();
 		System.out.println("IUException : runtime interrupted");
 	    }
 	}

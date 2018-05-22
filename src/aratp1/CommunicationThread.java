@@ -15,13 +15,13 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author p1506450
+ * @author p1506450 p1507338
  */
 public class CommunicationThread extends Com implements Runnable {
 
-    private InetAddress IP_ADDRESS;
-    private int PORT_CLIENT;
-    private int PORT;
+    private final InetAddress IP_ADDRESS;
+    private final int PORT_CLIENT;
+    private final int PORT;
 
     public CommunicationThread (DatagramSocket ds, DatagramPacket dp, int newPort) {
 	this.ds = ds;

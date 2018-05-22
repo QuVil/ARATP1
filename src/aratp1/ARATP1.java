@@ -17,9 +17,7 @@ public class ARATP1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("Scan des ports...");
-        ArrayList<Integer> portList = Com.scan(0, 65525);
-        
+        //NOTHING
     }
     
 }

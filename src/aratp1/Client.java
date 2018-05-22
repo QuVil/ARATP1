@@ -9,18 +9,22 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.net.DatagramPacket;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
  *
- * @author p1507338
+ * @author p1507338 p1506450
  */
 public class Client extends Com{
 
 	public Client(){
-		super();
+		super();    //Opens the highest available socket found
 	}
+        
+        /* Standard connection procedure. Sends the default connection message
+        /  to the default Server IP and Port.
+        /  If the connection is successful, the server port is returned.
+        */
 	public int connectToServer(){
 		String connectMessage = "hello rx302";
 		int currentServerport = 0;
@@ -42,8 +46,7 @@ public class Client extends Com{
 				try {
 					currentServerport = Integer.parseInt(messageData.split(" ")[2].trim());
 				} catch (NumberFormatException e) {
-					e.printStackTrace();
-					System.out.println("Conversion kk");
+					System.out.println("Number Conversion error.");
 				}
 			}
 		} catch(IOException e){
@@ -65,8 +68,8 @@ public class Client extends Com{
 						InetAddress.getByName(DEFAULT_SERVER_IP);
 					send(messageText, serverAddress, port);
 
-					//wait for confirmation from the server that the message
-					//has been received
+					//wait for confirmation from the server 
+                                        //that the message has been received
 					byte[] data = new byte[512];
 					dp = new DatagramPacket(data, data.length);
 					ds.receive(dp);
