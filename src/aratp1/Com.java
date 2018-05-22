@@ -55,11 +55,10 @@ public class Com {
 
     }
 
-    //returns an ArrayList of all unused (UDP) ports and displays the busy ones
     public DatagramSocket scan(int dep, int fin){
 	ArrayList<Integer> portList = new ArrayList<>();
 	DatagramSocket ds;
-	for (int i=dep; i<=fin; ++i){
+	for (int i=fin; i>=dep; --i){
 	    try{
 		ds = new DatagramSocket(i);
 		return ds;
